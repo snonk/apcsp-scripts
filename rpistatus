@@ -1,0 +1,27 @@
+#!/bin/bash
+
+DEVICES="rpi01 rpi02 rpi03 rpi04 rpi05 rpi06 rpi07 rpi08 rpi09 rpi10 rpi11 rpi12 rpi13 rpi14 rpi15 rpi16 rpi17 rpi18 rpi19 rpi20"
+
+if [ $# = 0 ] ; then
+
+	for pi in $DEVICES ; do
+
+	ping $pi -c 1 -w 500 > /dev/null
+	if [ $? = 0 ] ; then
+		echo "$pi is alive."
+	else 
+		echo "$pi is dead."
+	fi
+	done
+else
+for pi in $* ; do
+	ping $pi -c 1 -w 500 > /dev/null
+	if [ $? = 0 ] ; then
+                echo "$pi is alive."
+        else 
+                echo "$pi is dead."
+        fi
+done
+fi
+exit 0
+
