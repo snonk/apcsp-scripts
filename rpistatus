@@ -6,7 +6,7 @@ if [ $# = 0 ] ; then
 
 	for pi in $DEVICES ; do
 
-	ping $pi -c 1 -w 500 > /dev/null
+	ping $pi -c 1 -w 1 > /dev/null
 	if [ $? = 0 ] ; then
 		echo "$pi is alive."
 	else 
@@ -15,7 +15,7 @@ if [ $# = 0 ] ; then
 	done
 else
 for pi in $* ; do
-	ping $pi -c 1 -w 500 > /dev/null
+	ping $pi -c 1 -w 1 > /dev/null
 	if [ $? = 0 ] ; then
                 echo "$pi is alive."
         else 
