@@ -1,0 +1,33 @@
+#!/bin/bash
+
+localIP="$( hostname -I )"
+A="$(awk -F. '{print $1}' <<< $localIP).$(awk -F. '{print $2}' <<< $localIP).$(awk -F. '{print $3}' <<< $localIP)"
+foreignIP="$A.1"
+
+for i in {1..255}; do
+	foreignIP="$A.$i"
+	ping $foreignIP -c 1 -w 1 > /dev/null
+	if [ $? = 0 ] ; then
+                echo "$foreignIP is alive."
+		nc -zv -w 1 $foreignIP 22 &> /dev/null
+		if [ $? = 0 ] ; then
+			echo "SSH is running on $foreignIP"
+		else
+			echo "SSH is not running on $foreignIP"
+		fi
+                nc -zv -w 1 $foreignIP 80 &> /dev/null
+		if [ $? = 0 ] ; then
+			echo "HTTP is running on $foreignIP"
+		else
+			echo "HTTP is not running on $foreignIP"
+		fi
+                host $foreignIP
+                echo "MAC Address: $( arp -a $foreignIP | awk '{ print $4}')"
+		echo -e "\n"
+        else 
+                echo "$foreignIP is dead."
+		echo -e "\n"
+        fi
+done
+
+exit 0
